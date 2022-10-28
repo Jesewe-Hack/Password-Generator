@@ -1,29 +1,33 @@
+from PyQt6 import uic
+from PyQt6.QtWidgets import QApplication
+from tkinter import messagebox
 import random
-import colorama
-import ctypes
-import os
-from colorama import init, Fore
-init(autoreset=True)
-ctypes.windll.kernel32.SetConsoleTitleA("Password Generator | By Jesewe#8563")
 
 chars = '+-/*!&$#?=@<>abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
 
-while True:
-	os.system("cls")
-	print(Fore.MAGENTA + 'Добро пожаловать в Password Generator', Fore.GREEN + 'By', Fore.RED + 'Jesewe#8563')
+def gen_pass():
 	try:
-		number = input(Fore.CYAN + '\nКоличество паролей >>> ')
-		length = input(Fore.YELLOW + '\nДлина пароля >>> ')
-		number = int(number)
-		length = int(length)
-		print('\n')
+		number = 1
+		length = int(form.lineEdit_2.text())
 		for n in range(number):
 		    password =''
 		    for i in range(length):
 		        password += random.choice(chars)
-		    print(Fore.GREEN + password)
-		input(Fore.YELLOW + '\nНажмите Enter, для выхода в меню...')
+		    if length>16:
+		    	messagebox.showerror(f"Password Generator", "ERROR: Maximum password length is 16")
+		    else:
+		    	form.lineEdit.setText(password)
 	except Exception as e:
-		os.system("cls")
-		print(Fore.RED + '\n\nОшибка: недопустимый символ...')
-		input(Fore.YELLOW + '\nНажмите Enter, для выхода в меню...')
+		messagebox.showerror(f"Password Generator", f"FATAL ERROR!")
+
+Form, Window = uic.loadUiType("gui.ui")
+app = QApplication([])
+window = Window()
+form = Form()
+form.setupUi(window)
+window.show()
+
+form.lineEdit.setPlaceholderText('Click Generate')
+form.pushButton.clicked.connect(gen_pass)
+
+app.exec()
